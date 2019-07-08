@@ -1,0 +1,109 @@
+/***
+* Name: MyModel
+* Author: Daniel Figueroa
+* Description: Detecção de aeronaves invasoras por radares
+* Tags: radar, airplane, defense-system
+***/
+
+model MyModel
+
+global {
+	
+	int number_airplanes <- 100;
+	int number_invasor <- 10;
+	int number_airportA <- 1;
+	int number_airportB <- 1;
+	
+	init {
+		create airportA number:number_airportA;
+		create airportB number:number_airportB;
+		create airplane number:number_airplanes;
+		create invasor number:number_invasor;
+	}
+}
+
+species airportA {
+	float size <- 10.0;
+	rgb color <- #green;
+	aspect base { 
+		draw triangle(size) color: color;
+	}
+	
+	init {
+		location <- {15,30};
+	}
+}
+
+species airportB {
+	float size <- 10.0;
+	rgb color <- #green;
+	aspect base { 
+		draw triangle(size) color: color;
+	}
+	
+	init {
+		location <- {80,70};
+	}
+}
+
+species airplane skills:[moving]{
+		
+	float size <- 1.0;
+	rgb color <- #blue;
+	int altitude <- 10000;
+	
+	reflex moving {
+		do wander amplitude:90.0;
+	}
+		
+	aspect base {
+		draw circle(size) color: color ;
+	}
+}
+
+species invasor skills:[moving]{
+	float size <- 0.5;
+	rgb color <- #red;
+	
+	int altitude <- rnd(3);
+	bool highAltitude;
+	int detections <- 0;
+	
+	reflex teste {
+		if (altitude=3) {
+			highAltitude <- true;
+			detections <- detections + 1;
+			write detections;
+		}
+		
+		else {
+			highAltitude <- false;
+			detections <- detections;
+			write "Not detected.";
+		}
+	}
+		
+	reflex moving {
+		do wander amplitude:180.0;
+	}
+		
+	aspect base {
+		draw circle(size) color: color;
+	}
+}
+
+experiment simulation type:gui {
+	
+	output {
+		display my_display {
+			species airplane aspect:base;
+			species invasor aspect:base;
+			species airportA aspect:base;
+			species airportB aspect:base;
+			
+		}
+	}
+	
+}
+
+
