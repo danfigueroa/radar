@@ -69,7 +69,7 @@ species invasor skills:[moving]{
 	bool highAltitude;
 	int detections <- 0;
 	
-	reflex teste {
+	reflex stealth {
 		if (altitude=3) {
 			highAltitude <- true;
 			detections <- detections + 1;
